@@ -73,7 +73,7 @@ void *malloc(long unsigned int size)
 
 void free(void *pointer)
 {
-    return;
+    return systemCall(10, pointer, 0,0,0,0);
 }
 
 int printf(const char *str, ...)

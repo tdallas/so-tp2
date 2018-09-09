@@ -14,6 +14,7 @@ static uint64_t setBackGround(uint64_t rsi, uint64_t rdx, uint64_t rcx, uint64_t
 static uint64_t writePixel(uint64_t rsi, uint64_t rdx, uint64_t rcx, uint64_t r8, uint64_t r9);
 static uint64_t setPixel(uint64_t rsi, uint64_t rdx, uint64_t rcx, uint64_t r8, uint64_t r9);
 static uint64_t paintPixelBackGround(uint64_t rsi, uint64_t rdx, uint64_t rcx, uint64_t r8, uint64_t r9);
+static void memFree(uint64_t rsi, uint64_t rdx, uint64_t rcx, uint64_t r8, uint64_t r9);
 
 static uint64_t (*systemCall[])(uint64_t rsi, uint64_t rdx, uint64_t rcx, uint64_t r8, uint64_t r9) = {getTime,                         //0
 																									   readChar,                        //1
@@ -24,7 +25,8 @@ static uint64_t (*systemCall[])(uint64_t rsi, uint64_t rdx, uint64_t rcx, uint64
 																									   setBackGround,                   //6
 																									   writePixel,                      //7
 																									   setPixel,                        //8
-																									   paintPixelBackGround             //9
+																									   paintPixelBackGround,             //9
+																									   memFree // 10
 																									   };
 
 uint64_t systemCallDispatcher(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t rcx, uint64_t r8, uint64_t r9)
@@ -82,4 +84,9 @@ static uint64_t setPixel(uint64_t rsi, uint64_t rdx, uint64_t rcx, uint64_t r8, 
 static uint64_t paintPixelBackGround(uint64_t rsi, uint64_t rdx, uint64_t rcx, uint64_t r8, uint64_t r9)
 {
 	return paintPixelBackGroundColor((unsigned int)rsi, (unsigned int)rdx);
+}
+
+static void memFree(uint64_t rsi, uint64_t rdx, uint64_t rcx, uint64_t r8, uint64_t r9)
+{
+	return free((void *)rsi);
 }
