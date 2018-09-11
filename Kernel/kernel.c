@@ -45,6 +45,8 @@ int main()
 	load_idt();
 	speakerBeep();
 	printBackGround();
+	initializePageAllocator();
+	
 	((EntryPoint)sampleCodeModuleAddress)();
 
 	return 0;
