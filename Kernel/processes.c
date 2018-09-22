@@ -1,9 +1,8 @@
 #include "processes.h"
 #include "defs.h"
 #include "lib.h"
-#include "pageallocator.h"
+#include "pageAllocator.h"
 #include "mutex.h"
-#include "memorymanager.h"
 #include "scheduler.h"
 #include "videoDriver.h"
 

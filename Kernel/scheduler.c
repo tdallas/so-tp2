@@ -1,6 +1,5 @@
-#include "memorymanager.h"
+#include "lib.h"
 #include "scheduler.h"
-#include "dirs.h"
 #include "videoDriver.h"
 #include "mutex.h"
 #include "processes.h"
@@ -80,11 +79,11 @@ static void addProcess(process *p)
 	}
 }
 
-void yieldProcess()	
-{	
+void yieldProcess()
+{
 	current->next->quantum += 1;
-	current->quantum = 0;	
-	_yieldProcess();	
+	current->quantum = 0;
+	_yieldProcess();
 }
 
 void killProcess()
@@ -156,7 +155,7 @@ void unblock(queueADT queue)
 		{
 			unblock(queue);
 		}
-  
+
 		unblockProcess(current->p);
 		addProcess(current->p);
 	}

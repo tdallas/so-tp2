@@ -1,6 +1,5 @@
 #include <stdint.h>
 #include "mutex.h"
-#include "memorymanager.h"
 #include "lib.h"
 #include "processes.h"
 #include "scheduler.h"
@@ -14,7 +13,7 @@ typedef struct mutex_t
 {
 	char* name;
 	int value;
-	int id;	
+	int id;
 	process* blockedProcesses[MAX_PROCESSES];
 } mutex_t;
 
@@ -50,8 +49,8 @@ int mutexLock(mutex_t *mut)
 	while(mut->value==0)
 	{
 		process *p = getCurrentProcess();
-		blockProcess(p);		
-		mut->blockedProcesses[getProcessPid(p)]= p;		
+		blockProcess(p);
+		mut->blockedProcesses[getProcessPid(p)]= p;
 		yieldProcess();
 	}
 	mut->value = 0;
@@ -60,7 +59,7 @@ int mutexLock(mutex_t *mut)
 
 int mutexUnlock(mutex_t *mut)
 {
-	for(int i = 0; i < MAX_PROCESSES; i++){		
+	for(int i = 0; i < MAX_PROCESSES; i++){
 		unblockProcess(mut->blockedProcesses[i]);
 	}
 	mut->value = 1;

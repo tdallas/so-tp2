@@ -18,6 +18,9 @@ EXTERN irqDispatcher
 EXTERN exceptionDispatcher
 EXTERN load_idt
 
+GLOBAL _changeProcess
+GLOBAL _yieldProcess
+
 SECTION .text
 
 %macro pushState 0
@@ -100,6 +103,16 @@ _sti:
 	sti
 	ret
 
+
+_changeProcess:
+	mov rsp, rdi
+	popState
+	iretq
+
+_yieldProcess:
+	int 70h
+	ret
+
 picMasterMask:
 	push rbp
     mov rbp, rsp
@@ -137,11 +150,11 @@ _systemCallHandler:
     pushState
 
     call systemCallDispatcher
-    
+
 	mov [aux], rax
 	popState
     mov rax, [aux]
-    
+
 	iretq
 
 haltcpu:
