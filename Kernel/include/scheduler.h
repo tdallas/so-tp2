@@ -31,7 +31,6 @@ uint64_t nextProcess(uint64_t current_rsp);
 
 uint64_t runProcess(process * new_process);
 void killProcess();
-void yieldProcess();
 
 void _changeProcess(uint64_t rsp);
 void _yieldProcess();

@@ -3,8 +3,12 @@
 
 #include <stdint.h>
 // C functions
-// void *memset(void *destination, int32_t character, uint64_t length);
-// void *memcpy(void *destination, const void *source, uint64_t length);
+void *memset(void *destination, int32_t character, uint64_t length);
+void *memcpy(void *destination, const void *source, uint64_t length);
+int strcmpKernel(const char *s1, const char *s2);
+int strlenKernel(const char *s);
+void strcpyKernel(char *d, const char *s);
+void strcatKernel(char *d, const char *s);
 
 #define NULL 0
 

@@ -79,13 +79,6 @@ static void addProcess(process *p)
 	}
 }
 
-void yieldProcess()
-{
-	current->next->quantum += 1;
-	current->quantum = 0;
-	_yieldProcess();
-}
-
 void killProcess()
 {
 	nodeList *n = current;
@@ -96,6 +89,13 @@ void killProcess()
 	free((void *)n);
 	increaseQuantum();
 	_changeProcess(getProcessRsp(current->p));
+}
+
+void yieldProcess()
+{
+	current->next->quantum += 1;
+	current->quantum = 0;
+	_yieldProcess();
 }
 
 static void setNextCurrent()
