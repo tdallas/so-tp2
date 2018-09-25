@@ -35,6 +35,9 @@ void shell()
 	int counter = 0;
 	char ch;
 
+	createMutex();
+	createSem();
+
 	printf("$> ");
 
 	while (isRunning)
@@ -226,4 +229,13 @@ int wichColor(char *color)
 
 void exit() {
     return 1;
+}
+
+void createMutex()
+{
+	// systemCallMutexInit("printMutex");
+}
+void createSem()
+{
+	// systemCallSemOpen("printSem");
 }
