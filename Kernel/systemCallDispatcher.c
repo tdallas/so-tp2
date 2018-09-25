@@ -23,6 +23,7 @@ static uint64_t _receive(uint64_t pid, uint64_t dest, uint64_t length, uint64_t 
 static uint64_t _execProcess(uint64_t rsi, uint64_t rdx, uint64_t rcx, uint64_t r8, uint64_t r9);
 static uint64_t _killProcess(uint64_t rsi, uint64_t rdx, uint64_t rcx, uint64_t r8, uint64_t r9);
 static uint64_t _listProcesses(uint64_t rsi, uint64_t rdx, uint64_t rcx, uint64_t r8, uint64_t r9);
+static uint64_t _setProcessForeground(uint64_t rsi, uint64_t rdx, uint64_t rcx, uint64_t r8, uint64_t r9);
 
 
 static uint64_t (*systemCall[])(uint64_t rsi, uint64_t rdx, uint64_t rcx, uint64_t r8, uint64_t r9) = {_getTime,                         //0
@@ -132,5 +133,10 @@ static uint64_t _killProcess(uint64_t rsi, uint64_t rdx, uint64_t rcx, uint64_t 
 
 static uint64_t _listProcesses(uint64_t rsi, uint64_t rdx, uint64_t rcx, uint64_t r8, uint64_t r9){
 
+	return 1;
+}
+
+static uint64_t _setProcessForeground(uint64_t rsi, uint64_t rdx, uint64_t rcx, uint64_t r8, uint64_t r9){
+	setProcessForeground((int)rsi);
 	return 1;
 }
