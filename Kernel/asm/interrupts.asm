@@ -17,6 +17,7 @@ EXTERN systemCallDispatcher
 EXTERN irqDispatcher
 EXTERN exceptionDispatcher
 EXTERN load_idt
+EXTERN nextProcess
 
 GLOBAL _changeProcess
 GLOBAL _yieldProcess
@@ -68,6 +69,11 @@ SECTION .text
 
 	mov rdi, %1 ; pasaje de parametro
 	call irqDispatcher
+
+	mov rdi, rsp
+	call nextProcess
+
+	mov rsp, rax
 
 	; signal pic EOI (End of Interrupt)
 	mov al, 20h

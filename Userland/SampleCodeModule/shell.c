@@ -11,7 +11,7 @@ static char choice[BUFFER_SIZE];
 #define GREEN 4
 #define BLUE 5
 
-void test(int i);
+void test(int argc, char ** argv);
 
 void shell(int showMenu)
 {
@@ -114,24 +114,33 @@ int managingCases(char *option)
     else if (strcmp(option, "exit") == 0)
     {
         return 1;
+    }else if (strcmp(option, "schedulerTest") == 0){
+      printf("Corriendo schedulerTest:\n");
+
+      char msg1[1][1];
+      msg1[0][0] = 1;
+      execProcess(test, 1, msg1,"test");
+
+      char msg2[1][1];
+      msg2[0][0] = 2;
+      execProcess(test, 2, msg2,"test");
+
+      char msg3[1][1];
+      msg3[0][0] = 3;
+      execProcess(test, 3, msg3,"test");
+
     }
     else if (strcmp(option, "") != 0)
     {
         printf("Invalid input! For help write help.\n");
-    }else if (strcmp(option, "schedulerTest") != 0){
-      for(int i=0; i < 3; i++){
-        char msg[1];
-        msg[0] = i;
-        execProcess(test, msg, 1,"test");
-      }
     }
     *option = 0;
     return 0;
 }
 
-void test(int i){
+void test(int argc, char *argv[]){
   while(1){
-    printf("Proceso: %d\n", i);
+    printf("%d\n", argc);
   }
 }
 

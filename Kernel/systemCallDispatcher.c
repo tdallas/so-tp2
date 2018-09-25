@@ -22,6 +22,7 @@ static uint64_t _send(uint64_t pid, uint64_t msg, uint64_t length, uint64_t r8, 
 static uint64_t _receive(uint64_t pid, uint64_t dest, uint64_t length, uint64_t r8, uint64_t r9);
 static uint64_t _execProcess(uint64_t rsi, uint64_t rdx, uint64_t rcx, uint64_t r8, uint64_t r9);
 static uint64_t _killProcess(uint64_t rsi, uint64_t rdx, uint64_t rcx, uint64_t r8, uint64_t r9);
+static uint64_t _listProcesses(uint64_t rsi, uint64_t rdx, uint64_t rcx, uint64_t r8, uint64_t r9);
 
 
 static uint64_t (*systemCall[])(uint64_t rsi, uint64_t rdx, uint64_t rcx, uint64_t r8, uint64_t r9) = {_getTime,                         //0
@@ -38,7 +39,8 @@ static uint64_t (*systemCall[])(uint64_t rsi, uint64_t rdx, uint64_t rcx, uint64
 																										 _send,	//11
 																										 _receive, //12
 																										 _execProcess, //13
-																										 _killProcess //14
+																										 _killProcess, //14
+																										 _listProcesses //15
 																									   };
 
 
@@ -117,13 +119,18 @@ static uint64_t _receive(uint64_t pid, uint64_t dest, uint64_t length, uint64_t 
 	return 1;
 }
 
-static uint64_t _execProcess(uint64_t pointer, uint64_t argv, uint64_t argc, uint64_t name, uint64_t r9){
-	process *shell = createProcess(pointer, argv, argc, (char*)name);
+static uint64_t _execProcess(uint64_t pointer, uint64_t argc, uint64_t argv, uint64_t name, uint64_t r9){
+	process *shell = createProcess(pointer, argc, argv, (char*)name);
 	runProcess(shell);
 	return 1;
 }
 
 static uint64_t _killProcess(uint64_t rsi, uint64_t rdx, uint64_t rcx, uint64_t r8, uint64_t r9){
 	killProcess();
+	return 1;
+}
+
+static uint64_t _listProcesses(uint64_t rsi, uint64_t rdx, uint64_t rcx, uint64_t r8, uint64_t r9){
+
 	return 1;
 }
