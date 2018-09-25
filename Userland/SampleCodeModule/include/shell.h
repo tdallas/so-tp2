@@ -6,12 +6,18 @@
 #include <stdlib.h>
 #include <blobsFront.h>
 #include <digitalTime.h>
+#include <processExec.h>
+#include <instructions.h>
+
+#define MAX_WORD_LENGTH 124
+#define MAX_WORDS 32
 
 void shell();
 int managingCases(char *option);
 int changeTextColor(char *color);
 int changeBackGroundColor(char *color);
 int wichColor(char *color);
+void exit();
 
 extern int opCode();
 extern int zeroDiv();
