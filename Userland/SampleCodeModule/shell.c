@@ -1,4 +1,6 @@
 #include <shell.h>
+#include <process.h>
+#include <stdio.h>
 
 static char choice[BUFFER_SIZE];
 
@@ -8,6 +10,8 @@ static char choice[BUFFER_SIZE];
 #define YELLOW 3
 #define GREEN 4
 #define BLUE 5
+
+void test(int i);
 
 void shell(int showMenu)
 {
@@ -114,9 +118,21 @@ int managingCases(char *option)
     else if (strcmp(option, "") != 0)
     {
         printf("Invalid input! For help write help.\n");
+    }else if (strcmp(option, "schedulerTest") != 0){
+      for(int i=0; i < 3; i++){
+        char msg[1];
+        msg[0] = i;
+        execProcess(test, msg, 1,"test");
+      }
     }
     *option = 0;
     return 0;
+}
+
+void test(int i){
+  while(1){
+    printf("Proceso: %d\n", i);
+  }
 }
 
 int changeTextColor(char *color)
