@@ -14,7 +14,7 @@ void strcatKernel(char *d, const char *s);
 
 #define NULL 0
 
-void *malloc(uint64_t lenght);
+void *malloc(uint64_t length);
 void free(void* adress);
 
 //ASM functions

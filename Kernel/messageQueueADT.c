@@ -17,16 +17,58 @@ struct node{
   struct msg * message;
 };
 
-struct node *searchMessage(messageQueueADT queue, int pid){
-  for(struct node* aux = queue->first; aux != NULL ; aux = aux->tail){
-    if(aux->message->pid == pid){
-      return aux;
+
+int isMessageAvailable(struct node * curr, int pid, int length){
+  int aux = 0;
+  for(; curr != NULL; curr = curr->tail){
+    if(curr->message->pid == pid){
+      aux += curr->message->length;
+      if(aux >= length){
+        return 1;
+      }
     }
   }
-  return NULL;
+  return 0;
 }
 
-messageQueueADT newQueue(int pid){
+struct node * searchMessageR(struct node* curr, messageQueueADT queue, struct node* prev, int pid, int length, char * dest){
+  if(curr == NULL)
+    return curr;
+
+  curr->head = prev;
+  if(curr->message->pid == pid){
+    if(length >= curr->message->length){
+      memcpy(dest, curr->message->msg, curr->message->length);
+      length-=curr->message->length;
+      dest += curr->message->length;
+
+      struct node * aux = searchMessageR(curr->tail, queue, prev, pid, length, dest);
+      free(curr->message->msg);
+      free(curr->message);
+      free(curr);
+      return aux;
+
+    }else{
+      memcpy(dest, curr->message->msg, length);
+      memcpy(curr->message->msg, curr->message->msg+length, curr->message->length-length);
+      curr->message->length -= length;
+      return curr;
+    }
+  }else{
+    curr->tail = searchMessageR(curr->tail,queue, curr, pid, length, dest);
+    if(curr->tail == NULL)
+      queue->last = curr;
+    return curr;
+  }
+
+
+}
+
+void searchMessage(messageQueueADT queue, int pid, int length, char* dest){
+  queue->first = searchMessageR(queue->first, queue,  NULL, pid, length, dest);
+}
+
+messageQueueADT newMessageQueue(int pid){
   struct queueHeader* newQueue = malloc(sizeof(struct queueHeader));
   newQueue->ownerPid = pid;
   newQueue->first = NULL;
@@ -35,12 +77,16 @@ messageQueueADT newQueue(int pid){
   return (messageQueueADT)newQueue;
 }
 
-void sendMessage(messageQueueADT queue, struct msg * message){
-
+void sendMessage(messageQueueADT queue, int pid, char * text, int length){
+  char * message = malloc(length);
+  memcpy(message, text, length);
   struct node *newNode = malloc(sizeof(struct node));
   newNode->tail = NULL;
   newNode->head = queue->last;
-  newNode->message = message;
+  newNode->message = malloc(sizeof(struct msg));
+  newNode->message->pid = pid;
+  newNode->message->msg = message;
+  newNode->message->length = length;
 
   if(queue->first == NULL){
     queue->first = newNode;
@@ -50,37 +96,20 @@ void sendMessage(messageQueueADT queue, struct msg * message){
     queue->last = newNode;
   }
 
-  if(message->pid == queue->waitingForPid){
+  if(pid == queue->waitingForPid){
     //*** Unblock process ***
-    // process *p = getProcessByPid(queue->ownerPid);
-    // unblockProcess(p);
+    process *p = getProcessByPid(queue->ownerPid);
+    unblockProcess(p);
   }
 }
 
-struct msg receiveMessage(messageQueueADT queue, int pid){
-  struct node * pendingMessage = searchMessage(queue, pid);
-  if(pendingMessage == NULL){
-    queue->waitingForPid = pid;
+void receiveMessage(messageQueueADT queue, int pid, char* dest, int length){
+  if(isMessageAvailable(queue->first, pid, length) == 0){
     //*** Block process ***
-    // process *p = getProcessByPid(queue->ownerPid);
-    // blockProcess(p);
-    struct msg mensaje = {-1, "", 0};
-    return mensaje;
+    process *p = getProcessByPid(queue->ownerPid);
+    blockProcess(p);
+    //probablemente haya que decrementar el rip
   }else{
-    if(pendingMessage->head != NULL){
-      pendingMessage->head->tail = pendingMessage->tail;
-    }else{
-      queue->first = pendingMessage->tail;
-    }
-
-    if(pendingMessage->tail != NULL){
-      pendingMessage->tail->head = pendingMessage->head;
-    }else{
-      queue->last = pendingMessage->head;
-    }
-
-    struct msg aux = *(pendingMessage->message);
-    free(pendingMessage);
-    return aux;
+    searchMessage(queue, pid, length, dest);
   }
 }

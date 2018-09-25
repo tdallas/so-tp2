@@ -5,6 +5,7 @@
 
 #include "defs.h"
 #include "mutex.h"
+#include "messageQueueADT.h"
 
 #define RUNNING 0
 #define READY 1
@@ -24,6 +25,7 @@ typedef struct
   void *dataPage[MAX_DATA_PAGES];
   uint64_t pid;
   uint64_t ppid;
+  messageQueueADT messageQueue;
 } process;
 
 typedef char status;
@@ -60,6 +62,8 @@ typedef struct
   uint64_t ss;
   uint64_t base;
 } stackFrame;
+
+messageQueueADT getMessageQueue(int pid);
 
 process *createProcess(uint64_t rip, uint64_t argc, uint64_t argv, const char *name);
 void removeProcess(process *p);

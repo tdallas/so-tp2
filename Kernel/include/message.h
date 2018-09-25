@@ -4,7 +4,8 @@
 struct msg{
   int pid;
   char * msg;
-  int lenght;
+  int length;
 };
+
 
 #endif

@@ -5,6 +5,7 @@
 #include "mutex.h"
 #include "scheduler.h"
 #include "videoDriver.h"
+#include "messageQueueADT.h"
 
 static void freeDataPages(process *p);
 
@@ -12,6 +13,10 @@ static process *processesTable[MAX_PROCESSES] = {NULL};
 static process *foreground = NULL;
 
 static uint64_t processesNumber = 0;
+
+messageQueueADT getMessageQueue(int pid){
+  return getProcessByPid(pid)->messageQueue;
+}
 
 int insertProcess(process *p)
 {
@@ -40,6 +45,7 @@ process *createProcess(uint64_t newProcessRIP, uint64_t argc, uint64_t argv, con
   newProcess->rsp = createNewProcessStack(newProcessRIP, newProcess->stackPage, argc, argv);
   setNullAllProcessPages(newProcess);
   insertProcess(newProcess);
+  newProcess->messageQueue = newMessageQueue(newProcess->pid);
 
   if (newProcess->pid != 0)
   {
@@ -88,6 +94,7 @@ void removeProcess(process *p)
     processesTable[p->pid] = NULL;
     free((void *)p->stackPage);
     free((void *)p);
+    free((void *)p->messageQueue);
   }
 }
 

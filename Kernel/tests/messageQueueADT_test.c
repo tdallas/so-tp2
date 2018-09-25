@@ -3,59 +3,71 @@
 #include <string.h>
 #include <assert.h>
 #include <stdio.h>
+#include <string.h>
 
 
 void test1();
+void test2();
+void test3();
 
 int main(){
   test1();
+  test2();
+  test3();
 }
 
 void test1(){
-  struct msg receivedMsg;
-  messageQueueADT new = newQueue(1000);
+  messageQueueADT queue = newMessageQueue(10);
 
-  char * strMsg =  "hola como andas!";
-  struct msg newMsg = {10, strMsg, strlen(strMsg)+1};
+  char * msg1 = "hola como andas.";
+  sendMessage(queue, 9, msg1, strlen(msg1));
 
-  receivedMsg = receiveMessage(new, 10);
-  assert(strcmp(strMsg, receivedMsg.msg)!=0);
+  char response1[5];
+  receiveMessage(queue, 9, response1, 5);
+  assert(strcmp("hola ", response1) == 0);
 
-  sendMessage(new, &newMsg);
+  char response2[5];
+  receiveMessage(queue, 9, response2, 5);
+  assert(strcmp("como ", response2) == 0);
 
-  receivedMsg = receiveMessage(new, 8);
-  assert(receivedMsg.pid == -1);
+  char response3[6];
+  receiveMessage(queue, 9, response3, 6);
+  assert(strcmp("andas.", response3) == 0);
+}
 
-  receivedMsg = receiveMessage(new, -1);
-  assert(receivedMsg.pid == -1);
+void test2(){
+  messageQueueADT queue = newMessageQueue(10);
 
-  receivedMsg = receiveMessage(new, 10);
-  assert(strcmp(strMsg, receivedMsg.msg)==0);
+  char * msg1 = "hola";
+  sendMessage(queue, 9, msg1, strlen(msg1));
 
-  receivedMsg = receiveMessage(new, 10);
-  assert(strcmp(strMsg, receivedMsg.msg)!=0);
+  char response[9];
+  char responseBackup[9];
+  responseBackup[8]=0;
+  response[8]=0;
+  memcpy(responseBackup, response, 8);
+  receiveMessage(queue, 9, response, 8);
+  assert(strcmp(responseBackup, response) == 0);
 
-  struct msg newMsg2 = {9, strMsg, strlen(strMsg)+1};
-  sendMessage(new, &newMsg2);
+  char * msg2 = "como";
+  sendMessage(queue, 9, msg2, strlen(msg2));
 
-  struct msg newMsg3 = {8, strMsg, strlen(strMsg)+1};
-  sendMessage(new, &newMsg3);
+  receiveMessage(queue, 9, response, 8);
+  assert(strcmp("holacomo", response) == 0);
+}
 
-  struct msg newMsg4 = {7, strMsg, strlen(strMsg)+1};
-  sendMessage(new, &newMsg4);
+void test3(){
+  messageQueueADT queue1 = newMessageQueue(10);
 
-  receivedMsg = receiveMessage(new, 10);
-  assert(strcmp(strMsg, receivedMsg.msg)!=0);
+  char * msg1 = "hola   ";
+  sendMessage(queue1, 9, msg1, strlen(msg1));
 
-  receivedMsg = receiveMessage(new, 7);
-  assert(strcmp(strMsg, receivedMsg.msg)==0);
+  char response[9];
+  char responseBackup[9];
+  responseBackup[8]=0;
+  response[8]=0;
+  memcpy(responseBackup, response, 8);
+  receiveMessage(queue1, 8, response, 4);
+  assert(strcmp(responseBackup, response) == 0);
 
-  receivedMsg = receiveMessage(new, 7);
-  assert(strcmp(strMsg, receivedMsg.msg)!=0);
-
-  receivedMsg = receiveMessage(new, 9);
-  assert(strcmp(strMsg, receivedMsg.msg)==0);
-
-  receivedMsg = receiveMessage(new, 8);
-  assert(strcmp(strMsg, receivedMsg.msg)==0);
 }
