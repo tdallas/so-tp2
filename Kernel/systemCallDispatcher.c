@@ -6,6 +6,7 @@
 #include <messageQueueADT.h>
 #include <processes.h>
 #include <scheduler.h>
+#include <mutex.h>
 
 static uint64_t _getTime(uint64_t rsi, uint64_t rdx, uint64_t rcx, uint64_t r8, uint64_t r9);
 static uint64_t _readChar(uint64_t rsi, uint64_t rdx, uint64_t rcx, uint64_t r8, uint64_t r9);
@@ -24,6 +25,9 @@ static uint64_t _execProcess(uint64_t rsi, uint64_t rdx, uint64_t rcx, uint64_t 
 static uint64_t _killProcess(uint64_t rsi, uint64_t rdx, uint64_t rcx, uint64_t r8, uint64_t r9);
 static uint64_t _listProcesses(uint64_t rsi, uint64_t rdx, uint64_t rcx, uint64_t r8, uint64_t r9);
 static uint64_t _setProcessForeground(uint64_t rsi, uint64_t rdx, uint64_t rcx, uint64_t r8, uint64_t r9);
+static uint64_t _mutexInit(uint64_t mutex, uint64_t rdx, uint64_t rcx, uint64_t r8, uint64_t r9);
+static uint64_t _mutexUnlock(uint64_t mutex, uint64_t rdx, uint64_t rcx, uint64_t r8, uint64_t r9);
+static uint64_t _mutexLock(uint64_t mutex, uint64_t rdx, uint64_t rcx, uint64_t r8, uint64_t r9);
 
 
 static uint64_t (*systemCall[])(uint64_t rsi, uint64_t rdx, uint64_t rcx, uint64_t r8, uint64_t r9) = {_getTime,                         //0
@@ -41,7 +45,10 @@ static uint64_t (*systemCall[])(uint64_t rsi, uint64_t rdx, uint64_t rcx, uint64
 																										 _receive, //12
 																										 _execProcess, //13
 																										 _killProcess, //14
-																										 _listProcesses //15
+																										 _listProcesses, //15
+																										 _mutexInit, //16
+																										 _mutexUnlock, //17
+																										 _mutexLock //18
 																									   };
 
 
@@ -139,4 +146,16 @@ static uint64_t _listProcesses(uint64_t rsi, uint64_t rdx, uint64_t rcx, uint64_
 static uint64_t _setProcessForeground(uint64_t rsi, uint64_t rdx, uint64_t rcx, uint64_t r8, uint64_t r9){
 	setProcessForeground((int)rsi);
 	return 1;
+}
+
+static uint64_t _mutexInit(uint64_t name, uint64_t rdx, uint64_t rcx, uint64_t r8, uint64_t r9){
+	return mutexInit((void*)name);
+}
+
+static uint64_t _mutexLock(uint64_t mutex, uint64_t rdx, uint64_t rcx, uint64_t r8, uint64_t r9){
+	return mutexLock((void*)mutex);
+}
+
+static uint64_t _mutexUnlock(uint64_t mutex, uint64_t rdx, uint64_t rcx, uint64_t r8, uint64_t r9){
+	return mutexUnlock((void*)mutex);
 }
