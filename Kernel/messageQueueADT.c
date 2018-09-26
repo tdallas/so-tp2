@@ -2,24 +2,25 @@
 #include "include/message.h"
 #include "include/processes.h"
 #include "include/lib.h"
+#include "include/scheduler.h"
 
 
 struct queueHeader{
   int ownerPid;
-  struct node * first;
-  struct node * last;
+  struct messageNode * first;
+  struct messageNode * last;
   int waitingForPid;
   int messageSize;
 };
 
-struct node{
-  struct node * tail;
-  struct node * head;
+struct messageNode{
+  struct messageNode * tail;
+  struct messageNode * head;
   struct msg * message;
 };
 
 
-int isMessageAvailable(struct node * curr, int pid, int length){
+int isMessageAvailable(struct messageNode * curr, int pid, int length){
   int aux = 0;
   for(; curr != NULL; curr = curr->tail){
     if(curr->message->pid == pid){
@@ -32,7 +33,7 @@ int isMessageAvailable(struct node * curr, int pid, int length){
   return 0;
 }
 
-struct node * searchMessageR(struct node* curr, messageQueueADT queue, struct node* prev, int pid, int length, char * dest){
+struct messageNode * searchMessageR(struct messageNode* curr, messageQueueADT queue, struct messageNode* prev, int pid, int length, char * dest){
   if(curr == NULL)
     return curr;
 
@@ -43,7 +44,7 @@ struct node * searchMessageR(struct node* curr, messageQueueADT queue, struct no
       length-=curr->message->length;
       dest += curr->message->length;
 
-      struct node * aux = searchMessageR(curr->tail, queue, prev, pid, length, dest);
+      struct messageNode * aux = searchMessageR(curr->tail, queue, prev, pid, length, dest);
       free(curr->message->msg);
       free(curr->message);
       free(curr);
@@ -81,7 +82,7 @@ messageQueueADT newMessageQueue(int pid){
 void sendMessage(messageQueueADT queue, int pid, char * text, int length){
   char * message = malloc(length);
   memcpy(message, text, length);
-  struct node *newNode = malloc(sizeof(struct node));
+  struct messageNode *newNode = malloc(sizeof(struct messageNode));
   newNode->tail = NULL;
   newNode->head = queue->last;
   newNode->message = malloc(sizeof(struct msg));
