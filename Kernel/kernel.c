@@ -51,8 +51,6 @@ int main()
 	printBackGround();
 	initializePageAllocator();
 
-	//runProcess(createProcess((uint64_t)sampleCodeModuleAddress, 0,0, "init"));
-
 	process *shell = createProcess((uint64_t)sampleCodeModuleAddress, 0,0, "shell");
 	setProcessForeground(shell->pid);
 	runProcess(shell);

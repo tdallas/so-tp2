@@ -44,8 +44,8 @@ void shell()
 
 	while (isRunning)
 	{
+		ch = getchar();
 
-		getchar(&ch);
 		if (counter < MAX_WORD_LENGTH || ch == '\n' || ch == '\b')
 		{
 

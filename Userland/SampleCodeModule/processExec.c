@@ -18,10 +18,10 @@ int execProcess(void *function, int argc, char **argv, char *name, int foregroun
 
 int sysExec(void *function, int argc, char **argv, char *name)
 {
-  return (uint64_t)systemCall(23, (uint64_t)function, argc, (uint64_t)argv, (uint64_t)name, 0);
+  return (uint64_t)systemCall(13, (uint64_t)function, argc, (uint64_t)argv, (uint64_t)name, 0);
 }
 
 void sysSetForeground(int pid)
 {
-  systemCall(24, (uint64_t)pid, 0, 0, 0, 0);
+  systemCall(19, (uint64_t)pid, 0, 0, 0, 0);
 }

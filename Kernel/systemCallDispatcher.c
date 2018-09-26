@@ -48,7 +48,8 @@ static uint64_t (*systemCall[])(uint64_t rsi, uint64_t rdx, uint64_t rcx, uint64
 																										 _listProcesses, //15
 																										 _mutexInit, //16
 																										 _mutexUnlock, //17
-																										 _mutexLock //18
+																										 _mutexLock, //18
+																										 _setProcessForeground //19
 																									   };
 
 
