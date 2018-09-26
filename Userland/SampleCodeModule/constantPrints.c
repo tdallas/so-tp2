@@ -1,4 +1,5 @@
 #include <constantPrints.h>
+#include <exitProcess.h>
 
 static const char weekDays[7][10] = {"Domingo", "Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado"};
 static const char months[12][11] = {"Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"};
@@ -39,6 +40,7 @@ void help()
     printf("              Write exceptionOpCode for trying our opCode exception catch\n");
     printf("                           If you want to exit, write exit\n");
     printf("                            \n");
+    exitProcess();
 }
 
 void info()
@@ -56,6 +58,7 @@ void info()
     printf("                      happy to solve them (hope they're few). You can send an email to : \n");
     printf("                              tdorado@itba.edu.ar or tdallas@itba.edu.ar\n");
     printf("\n                                   THANKS FOR USING OUR OS! :) \n\n");
+    exitProcess();
 }
 
 void displayTime()
@@ -64,4 +67,5 @@ void displayTime()
     printTime();
     printDate();
     printTimeUTC();
+    exitProcess();
 }

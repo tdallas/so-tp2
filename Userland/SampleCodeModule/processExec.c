@@ -25,3 +25,7 @@ void sysSetForeground(int pid)
 {
   systemCall(19, (uint64_t)pid, 0, 0, 0, 0);
 }
+
+void sysKillProcess(){
+	systemCall(14, 0, 0, 0, 0, 0);
+}

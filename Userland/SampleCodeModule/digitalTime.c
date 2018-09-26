@@ -1,4 +1,5 @@
 #include <digitalTime.h>
+#include <exitProcess.h>
 
 #define WHITE 0
 #define RED 1
@@ -20,7 +21,7 @@ void startDigitalTime()
 
     clearWorkSpace();
     printf("Press c to change color or b or ESC to go back.\n");
-    
+
     printMark();
 
     getAllTimes(lastTime);
@@ -69,6 +70,7 @@ void startDigitalTime()
         }
     }
     clearWorkSpace();
+    exitProcess();
 }
 
 void printHour(int actualTime[7])

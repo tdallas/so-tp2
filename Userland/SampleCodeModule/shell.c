@@ -1,6 +1,7 @@
 #include <shell.h>
 #include <processExec.h>
 #include <stdio.h>
+#include <exitProcess.h>
 
 static char choice[BUFFER_SIZE];
 
@@ -18,7 +19,7 @@ static instruction commands[] = {
 		{"displayTimeConsole\n", displayTime},
 		{"blobWars\n", iniciarBlobWars},
 		{"exceptionZero\n", zeroDiv},
-		{"exit\n", exit},
+		{"exit\n", exitProcess},
 		{"exceptionOpCode\n", opCode}};
 
 #define DEFAULT 0
@@ -229,9 +230,6 @@ int wichColor(char *color)
     return -1;
 }
 
-void exit() {
-    return 1;
-}
 
 void createMutex()
 {
