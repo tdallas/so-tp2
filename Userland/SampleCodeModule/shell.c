@@ -61,8 +61,6 @@ void shell()
 			if (ch == '\n')
 			{
 				callFunction(string);
-				if (isRunning)
-                	printf("$> ");
 				for(int aux=0; aux<counter; aux++){
 					string[aux] = 0;
 				}
@@ -116,7 +114,7 @@ int callFunction(char *buffer)
 	}
 
 	if (valid == 0){
-		printf("Wrong input\n");
+		printf("Wrong input\n$>");
 		return 0;
 	}
 
