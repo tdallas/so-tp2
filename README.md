@@ -1,4 +1,4 @@
-# TPE -  Arquitectura de Computadoras 2018
+# SO - TP2
 System based in x64BareBones for the architecture Intel 64.
 
 ## To run the proyect:
