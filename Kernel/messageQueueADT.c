@@ -9,6 +9,7 @@ struct queueHeader{
   struct node * first;
   struct node * last;
   int waitingForPid;
+  int messageSize;
 };
 
 struct node{
@@ -96,7 +97,7 @@ void sendMessage(messageQueueADT queue, int pid, char * text, int length){
     queue->last = newNode;
   }
 
-  if(pid == queue->waitingForPid){
+  if(pid == queue->waitingForPid && isMessageAvailable(queue->first, pid, queue->messageSize-length)){
     //*** Unblock process ***
     process *p = getProcessByPid(queue->ownerPid);
     unblockProcess(p);
@@ -106,9 +107,12 @@ void sendMessage(messageQueueADT queue, int pid, char * text, int length){
 void receiveMessage(messageQueueADT queue, int pid, char* dest, int length){
   if(isMessageAvailable(queue->first, pid, length) == 0){
     //*** Block process ***
+    queue->waitingForPid=pid;
+    queue->messageSize = length;
     process *p = getProcessByPid(queue->ownerPid);
     blockProcess(p);
-    //probablemente haya que decrementar el rip
+    yieldProcess();
+    receiveMessage(queue, pid, dest, length);
   }else{
     searchMessage(queue, pid, length, dest);
   }

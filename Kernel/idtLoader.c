@@ -33,6 +33,7 @@ void load_idt()
   //Interruptions
   setup_IDT_entry(0x20, (uint64_t)&_irq00Handler); // Timer
   setup_IDT_entry(0x21, (uint64_t)&_irq01Handler); // Keyboard
+  setup_IDT_entry(0x70, (uint64_t)&_yield_interrupt); // Yield interrupt
 
   //System Calls
   setup_IDT_entry(0x80, (uint64_t)&_systemCallHandler); // System Call

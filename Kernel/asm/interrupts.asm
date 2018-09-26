@@ -21,6 +21,7 @@ EXTERN nextProcess
 
 GLOBAL _changeProcess
 GLOBAL _yieldProcess
+GLOBAL _yield_interrupt
 
 SECTION .text
 
@@ -122,6 +123,17 @@ _changeProcess:
 	_yieldProcess:
 	int 70h
 	ret
+
+	_yield_interrupt:
+		pushState
+
+		mov rdi, rsp
+		call nextProcess
+
+		mov rsp, rax
+		popState
+
+		iretq
 
 picMasterMask:
 	push rbp
