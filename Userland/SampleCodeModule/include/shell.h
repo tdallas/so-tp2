@@ -8,9 +8,11 @@
 #include <digitalTime.h>
 #include <processExec.h>
 #include <instructions.h>
+#include <messageTest.h>
 
 #define MAX_WORD_LENGTH 124
 #define MAX_WORDS 32
+#define BUFFERSIZE 1024
 
 void shell();
 int managingCases(char *option);

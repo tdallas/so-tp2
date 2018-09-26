@@ -5,6 +5,14 @@ static unsigned int charG = 255;
 static unsigned int charB = 255;
 static char buffer[BUFFER_SIZE];
 
+int strlenUserland(const char *s)
+{
+	const char *p = s;
+	while (*s)
+		++s;
+	return s - p;
+}
+
 int abs(int a)
 {
     if (a < 0)

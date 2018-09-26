@@ -1,7 +1,7 @@
 #ifndef FUNCTIONS_H
 #define FUNCTIONS_H
 
-#define CMD_SIZE 13
+
 
 typedef struct
 {

@@ -12,6 +12,7 @@
 #define BUFFER_SIZE 128
 #define INT_BUFFER_SIZE 12
 
+int strlenUserland(const char *s);
 void beepSound();
 int abs(int a);
 int getchar();

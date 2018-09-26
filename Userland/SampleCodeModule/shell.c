@@ -6,7 +6,8 @@
 static char choice[BUFFER_SIZE];
 
 #define STEP 10
-#define BUFFERSIZE 1024
+
+#define CMD_SIZE 11
 
 static int isRunning = 1;
 static instruction commands[] = {
@@ -15,12 +16,14 @@ static instruction commands[] = {
 		{"changeBackGroundColor\n", changeBackGroundColor},
 		{"info\n", info},
 		{"clear\n", clearWorkSpace},
-		{"displayTimeDigital\n", startDigitalTime},
+		//{"displayTimeDigital\n", startDigitalTime},
 		{"displayTimeConsole\n", displayTime},
 		{"blobWars\n", iniciarBlobWars},
 		{"exceptionZero\n", zeroDiv},
 		{"exit\n", exitProcess},
-		{"exceptionOpCode\n", opCode}};
+		{"exceptionOpCode\n", opCode},
+		{"messageTest\n", messageTest}
+	};
 
 #define DEFAULT 0
 #define RED 1
@@ -60,6 +63,9 @@ void shell()
 				callFunction(string);
 				if (isRunning)
                 	printf("$> ");
+				for(int aux=0; aux<counter; aux++){
+					string[aux] = 0;
+				}
 				counter = 0;
 			}
 
@@ -109,8 +115,10 @@ int callFunction(char *buffer)
 		}
 	}
 
-	if (valid == 0)
+	if (valid == 0){
 		printf("Wrong input\n");
+		return 0;
+	}
 
 	return 1;
 }

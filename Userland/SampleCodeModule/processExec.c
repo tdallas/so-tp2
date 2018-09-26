@@ -29,3 +29,7 @@ void sysSetForeground(int pid)
 void sysKillProcess(){
 	systemCall(14, 0, 0, 0, 0, 0);
 }
+
+int getPid(){
+	return systemCall(20,0,0,0,0,0);
+}

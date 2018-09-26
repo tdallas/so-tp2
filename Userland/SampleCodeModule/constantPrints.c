@@ -28,14 +28,8 @@ void help()
     printf("                            \n");
     printf("                                For more information, write info\n");
     printf("                                To clean the console, write clear\n");
-    printf("             If you want to display time on console, write displayTime -console\n");
-    printf("            If you want to display the digital time, write displayTime -digital\n");
-    printf("              If you want to change the timezone, write setTimeZone NUMBER\n");
-    printf("              If you want to change the backgroundColor, write changeBackGroundColor COLOR\n");
-    printf("              If you want to change the textColor, write changeTextColor COLOR\n");
-    printf("              Where COLOR could be default, red, orange, yellow, green or blue\n");
-    printf("              If you want the terminal to reply a message, write echo MESSAGE\n");
-    printf("               If you want to play Blobwars (you should), write blobWars\n");
+    printf("             If you want to display time on console, write displayTimeConsole\n");
+    printf("             messageTest :: sends a message to multiple processes\n");
     printf("              Write exceptionZero for trying our divZero exception catch\n");
     printf("              Write exceptionOpCode for trying our opCode exception catch\n");
     printf("                           If you want to exit, write exit\n");
@@ -66,6 +60,6 @@ void displayTime()
     printf("Epoch Time: %d.\n", time(NULL));
     printTime();
     printDate();
-    printTimeUTC();
+   printTimeUTC();
     exitProcess();
 }

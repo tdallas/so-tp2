@@ -28,6 +28,7 @@ static uint64_t _setProcessForeground(uint64_t rsi, uint64_t rdx, uint64_t rcx, 
 static uint64_t _mutexInit(uint64_t mutex, uint64_t rdx, uint64_t rcx, uint64_t r8, uint64_t r9);
 static uint64_t _mutexUnlock(uint64_t mutex, uint64_t rdx, uint64_t rcx, uint64_t r8, uint64_t r9);
 static uint64_t _mutexLock(uint64_t mutex, uint64_t rdx, uint64_t rcx, uint64_t r8, uint64_t r9);
+static uint64_t _getPid(uint64_t mutex, uint64_t rdx, uint64_t rcx, uint64_t r8, uint64_t r9);
 
 
 static uint64_t (*systemCall[])(uint64_t rsi, uint64_t rdx, uint64_t rcx, uint64_t r8, uint64_t r9) = {_getTime,                         //0
@@ -49,7 +50,8 @@ static uint64_t (*systemCall[])(uint64_t rsi, uint64_t rdx, uint64_t rcx, uint64
 																										 _mutexInit, //16
 																										 _mutexUnlock, //17
 																										 _mutexLock, //18
-																										 _setProcessForeground //19
+																										 _setProcessForeground, //19
+																										 _getPid //20
 																									   };
 
 
@@ -129,9 +131,9 @@ static uint64_t _receive(uint64_t pid, uint64_t dest, uint64_t length, uint64_t 
 }
 
 static uint64_t _execProcess(uint64_t pointer, uint64_t argc, uint64_t argv, uint64_t name, uint64_t r9){
-	process *shell = createProcess(pointer, argc, argv, (char*)name);
-	runProcess(shell);
-	return 1;
+	process *p = createProcess(pointer, argc, argv, (char*)name);
+	runProcess(p);
+	return getProcessPid(p);
 }
 
 static uint64_t _killProcess(uint64_t rsi, uint64_t rdx, uint64_t rcx, uint64_t r8, uint64_t r9){
@@ -159,4 +161,9 @@ static uint64_t _mutexLock(uint64_t mutex, uint64_t rdx, uint64_t rcx, uint64_t 
 
 static uint64_t _mutexUnlock(uint64_t mutex, uint64_t rdx, uint64_t rcx, uint64_t r8, uint64_t r9){
 	return mutexUnlock((void*)mutex);
+}
+
+static uint64_t _getPid(uint64_t rsi, uint64_t rdx, uint64_t rcx, uint64_t r8, uint64_t r9){
+	process * p = getCurrentProcess();
+	return getProcessPid(p);
 }

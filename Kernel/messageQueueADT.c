@@ -3,6 +3,7 @@
 #include "include/processes.h"
 #include "include/lib.h"
 #include "include/scheduler.h"
+#include <videoDriver.h>
 
 
 struct queueHeader{
@@ -80,6 +81,7 @@ messageQueueADT newMessageQueue(int pid){
 }
 
 void sendMessage(messageQueueADT queue, int pid, char * text, int length){
+
   char * message = malloc(length);
   memcpy(message, text, length);
   struct messageNode *newNode = malloc(sizeof(struct messageNode));
@@ -110,7 +112,8 @@ void receiveMessage(messageQueueADT queue, int pid, char* dest, int length){
     //*** Block process ***
     queue->waitingForPid=pid;
     queue->messageSize = length;
-    process *p = getProcessByPid(queue->ownerPid);
+    process *p = getCurrentProcess();
+
     blockProcess(p);
     yieldProcess();
     receiveMessage(queue, pid, dest, length);
