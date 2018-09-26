@@ -17,6 +17,11 @@ EXTERN systemCallDispatcher
 EXTERN irqDispatcher
 EXTERN exceptionDispatcher
 EXTERN load_idt
+EXTERN nextProcess
+
+GLOBAL _changeProcess
+GLOBAL _yieldProcess
+GLOBAL _yield_interrupt
 
 SECTION .text
 
@@ -36,9 +41,13 @@ SECTION .text
 	push r13
 	push r14
 	push r15
+	push fs
+	push gs
 %endmacro
 
 %macro popState 0
+	pop gs
+	pop fs
 	pop r15
 	pop r14
 	pop r13
@@ -61,6 +70,11 @@ SECTION .text
 
 	mov rdi, %1 ; pasaje de parametro
 	call irqDispatcher
+
+	mov rdi, rsp
+	call nextProcess
+
+	mov rsp, rax
 
 	; signal pic EOI (End of Interrupt)
 	mov al, 20h
@@ -100,6 +114,27 @@ _sti:
 	sti
 	ret
 
+
+_changeProcess:
+	mov rsp, rdi
+	popState
+	iretq
+
+	_yieldProcess:
+	int 70h
+	ret
+
+	_yield_interrupt:
+		pushState
+
+		mov rdi, rsp
+		call nextProcess
+
+		mov rsp, rax
+		popState
+
+		iretq
+
 picMasterMask:
 	push rbp
     mov rbp, rsp
@@ -137,11 +172,11 @@ _systemCallHandler:
     pushState
 
     call systemCallDispatcher
-    
+
 	mov [aux], rax
 	popState
     mov rax, [aux]
-    
+
 	iretq
 
 haltcpu:

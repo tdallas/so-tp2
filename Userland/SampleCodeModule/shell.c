@@ -1,6 +1,25 @@
 #include <shell.h>
+#include <processExec.h>
+#include <stdio.h>
 
 static char choice[BUFFER_SIZE];
+
+#define STEP 10
+#define BUFFERSIZE 1024
+
+static int isRunning = 1;
+static instruction commands[] = {
+		{"help\n", help},
+		{"changeTextColor\n", changeTextColor},
+		{"changeBackGroundColor\n", changeBackGroundColor},
+		{"info\n", info},
+		{"clear\n", clearWorkSpace},
+		{"displayTimeDigital\n", startDigitalTime},
+		{"displayTimeConsole\n", displayTime},
+		{"blobWars\n", iniciarBlobWars},
+		{"exceptionZero\n", zeroDiv},
+		{"exit\n", exit},
+		{"exceptionOpCode\n", opCode}};
 
 #define DEFAULT 0
 #define RED 1
@@ -9,114 +28,122 @@ static char choice[BUFFER_SIZE];
 #define GREEN 4
 #define BLUE 5
 
-void shell(int showMenu)
+
+void shell()
 {
-    int flag = 0;
-    while (!flag)
-    {
-        printf("$> ");
-        scanf("%n", choice);
-        flag = managingCases(choice);
-    }
+	printf("Shell initialized\n");
+	char string[MAX_WORD_LENGTH] = {0};
+	char lastString[MAX_WORD_LENGTH] = {0};
+	int counter = 0;
+	char ch;
+
+	createMutex();
+	createSem();
+
+	printf("$> ");
+
+	while (isRunning)
+	{
+		ch = getchar();
+
+		if (counter < MAX_WORD_LENGTH || ch == '\n' || ch == '\b')
+		{
+
+			putchar(ch);
+
+			string[counter] = ch;
+			(ch != 0) ? counter++ : counter;
+
+			if (ch == '\n')
+			{
+				callFunction(string);
+				if (isRunning)
+                	printf("$> ");
+				counter = 0;
+			}
+
+			if (ch == '\b')
+			{
+				(counter != 0) ? string[counter--] = 0 : counter;
+				(counter != 0) ? string[counter--] = 0 : counter;
+			}
+			if (ch == 14)
+			{
+				while (counter)
+				{
+					putchar('\b');
+					(counter != 0) ? string[counter--] = 0 : counter;
+					(counter != 0) ? string[counter] = 0 : counter;
+				}
+			}
+		}
+	}
 }
 
-int managingCases(char *option)
+int callFunction(char *buffer)
 {
-    if (strcmp(option, "help") == 0)
-    {
-        help();
-    }
-    else if (strncmp(option, "setTimeZone ", 11) == 0)
-    {
-        int newTimeZone;
-        int correct = sscanf(option, "setTimeZone %d", &newTimeZone);
-        if (correct == 1)
-        {
-            setTimeUTC(newTimeZone);
-            printTimeUTC();
-        }
-        else
-        {
-            printf("Invalid input! For help write help.\n");
-        }
-    }
-    else if (strncmp(option, "changeTextColor ", 15) == 0)
-    {
-        int correct = changeTextColor(option + 16);
-        if (correct == 1)
-        {
-            printf("Color changed!\n");
-        }
-        else
-        {
-            printf("Invalid input! For help write help.\n");
-        }
-    }
-    else if (strncmp(option, "changeBackGroundColor ", 21) == 0)
-    {
-        int correct = changeBackGroundColor(option + 22);
-        if (correct == 1)
-        {
-            clearWorkSpace();
-            printf("Color changed!\n");
-        }
-        else
-        {
-            printf("Invalid input! For help write help.\n");
-        }
-    }
-    else if (strncmp(option, "echo ", 4) == 0)
-    {
-        char buffer[BUFFER_SIZE];
-        int correct = sscanf(option, "echo %n", buffer);
-        if (correct == 1)
-        {
-            printf(buffer);
-            printf("\n");
-        }
-        else
-        {
-            printf("Invalid input! For help write help.\n");
-        }
-    }
-    else if (strcmp(option, "info") == 0)
-    {
-        info();
-    }
-    else if (strcmp(option, "displayTime -digital") == 0)
-    {
-        startDigitalTime();
-    }
-    else if (strcmp(option, "displayTime -console") == 0)
-    {
-        displayTime();
-    }
-    else if (strcmp(option, "blobWars") == 0)
-    {
-        iniciarBlobWars();
-    }
-    else if (strcmp(option, "exceptionZero") == 0)
-    {
-        zeroDiv();
-    }
-    else if (strcmp(option, "exceptionOpCode") == 0)
-    {
-        opCode();
-    }
-    else if (strcmp(option, "clear") == 0)
-    {
-        clearWorkSpace();
-    }
-    else if (strcmp(option, "exit") == 0)
-    {
-        return 1;
-    }
-    else if (strcmp(option, "") != 0)
-    {
-        printf("Invalid input! For help write help.\n");
-    }
-    *option = 0;
-    return 0;
+	if (buffer == NULL)
+	{
+		return 1;
+	}
+
+	int words;
+	char **argv;
+
+	int foreground = 1;
+	if (*buffer == '&')
+	{
+		buffer++;
+		foreground = 0;
+	}
+
+	parseParams(buffer, &words, &argv);
+	int i, valid = 0;
+	for (i = 0; i < CMD_SIZE && valid == 0; i++)
+	{
+		if (strcmp(argv[0], commands[i].name) == 0)
+		{
+			execProcess(commands[i].function, words, argv, commands[i].name, foreground);
+			valid = 1;
+		}
+	}
+
+	if (valid == 0)
+		printf("Wrong input\n");
+
+	return 1;
+}
+
+void parseParams(char *command, int *argc, char ***argv)
+{
+	char buffer[BUFFERSIZE];
+	int count = 0, size = 0, i = 0, j = 0;
+	do
+	{
+		if (command[i] != ' ' && command[i] != 0)
+		{
+			buffer[j] = command[i];
+			j++;
+		}
+		else if (j != 0)
+		{
+			if (size - count == 0)
+			{
+				size += STEP;
+				(*argv) = (char **)malloc(sizeof(void *) * size);
+			}
+			(*argv)[count] = (char *)malloc(sizeof(char) * (j + 1));
+			for (int k = 0; k < j; k++)
+			{
+				(*argv)[count][k] = buffer[k];
+			}
+			(*argv)[count][j] = 0; //Null terminated
+			count++;
+			j = 0;
+		}
+	} while (command[i++] != 0);
+
+	(*argc) = count;
 }
 
 int changeTextColor(char *color)
@@ -200,4 +227,17 @@ int wichColor(char *color)
         return BLUE;
     }
     return -1;
+}
+
+void exit() {
+    return 1;
+}
+
+void createMutex()
+{
+	// systemCallMutexInit("printMutex");
+}
+void createSem()
+{
+	// systemCallSemOpen("printSem");
 }

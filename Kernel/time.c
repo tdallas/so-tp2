@@ -1,4 +1,5 @@
 #include <time.h>
+#include <scheduler.h>
 
 static unsigned long ticks = 0;
 

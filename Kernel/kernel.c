@@ -3,6 +3,10 @@
 #include <moduleLoader.h>
 #include <idtLoader.h>
 #include <videoDriver.h>
+#include <processes.h>
+#include <scheduler.h>
+#include <pageAllocator.h>
+#include <init.h>
 
 extern uint8_t text;
 extern uint8_t rodata;
@@ -45,7 +49,19 @@ int main()
 	load_idt();
 	speakerBeep();
 	printBackGround();
-	((EntryPoint)sampleCodeModuleAddress)();
+	initializePageAllocator();
+
+	process *shell = createProcess((uint64_t)sampleCodeModuleAddress, 0,0, "shell");
+	setProcessForeground(shell->pid);
+	runProcess(shell);
+
+	while (1)
+	{
+		_hlt();
+	}
+
+
+
 
 	return 0;
 }
