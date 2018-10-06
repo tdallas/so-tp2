@@ -279,12 +279,10 @@ void printPIDS()
   {
     printString("PID: ", 0, 155, 255);
     printDec(processesTable[i]->pid);
-    //printInt(processesTable[i]->pid, 0, 155, 255); BORRAR
     printString("\n", 0, 155, 255);
 
     printString("PPID: ", 0, 155, 255);
     printDec(processesTable[i]->ppid);
-   // printInt(processesTable[i]->ppid, 0, 155, 255); BORRAR
     printString("\n", 0, 155, 255);
 
     printString("Name: ", 0, 155, 255);
@@ -317,7 +315,6 @@ void printPIDS()
 
     printString("Data Page: ", 0, 155, 255);
     printDec((uint64_t)processesTable[i]->dataPage);
-    //printInt((uint64_t)processesTable[i]->dataPage, 0, 155, 255); BORRAR
     printString("\n", 0, 155, 255);
 
     printString("-------------------------------\n", 0, 155, 255);

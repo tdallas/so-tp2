@@ -150,7 +150,7 @@ int paintPixelBackGroundColor(unsigned int x, unsigned int y)
 
 void printString(const char *str, unsigned char R, unsigned char G, unsigned char B)
 {
-	int i;
+	int i = 0;
 	while (str[i] != 0)
 	{
 		printChar(str[i++], R, G, B);

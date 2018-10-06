@@ -7,7 +7,7 @@ static char choice[BUFFER_SIZE];
 
 #define STEP 10
 
-#define CMD_SIZE 11
+#define CMD_SIZE 12
 
 static int isRunning = 1;
 static instruction commands[] = {
@@ -22,7 +22,8 @@ static instruction commands[] = {
 		{"exceptionZero\n", zeroDiv},
 		{"exit\n", exitProcess},
 		{"exceptionOpCode\n", opCode},
-		{"messageTest\n", messageTest}
+		{"messageTest\n", messageTest},
+		{"printPids\n", printPids}
 	};
 
 #define DEFAULT 0

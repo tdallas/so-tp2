@@ -33,3 +33,7 @@ void sysKillProcess(){
 int getPid(){
 	return systemCall(20,0,0,0,0,0);
 }
+
+void printPids() {
+	systemCall(15,0,0,0,0,0);
+}

@@ -4,4 +4,5 @@
 int execProcess(void* function,int argc, char** argv, char* name, int foreground);
 void sysSetForeground(int pid);
 void sysKillProcess();
+void printPids();
 #endif
