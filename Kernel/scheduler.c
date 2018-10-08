@@ -91,6 +91,7 @@ void killProcess()
 	_changeProcess(getProcessRsp(current->p));
 }
 
+
 void yieldProcess()
 {
 	current->next->quantum += 1;

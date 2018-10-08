@@ -1,6 +1,7 @@
 #include "stdlib.h"
 #include "shell.h"
 #include "systemCall.h"
+#include <exitProcess.h>
 
 typedef void (*entry_point)(int, char **);
 int sysExec(void *function, int argc, char **argv, char *name);
@@ -36,4 +37,5 @@ int getPid(){
 
 void printPids() {
 	systemCall(15,0,0,0,0,0);
+	exitProcess();
 }

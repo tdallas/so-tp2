@@ -63,6 +63,7 @@ int mutexUnlock(mutex_t *mut)
 		unblockProcess(mut->blockedProcesses[i]);
 	}
 	mut->value = 1;
+	yieldProcess();
 	return mut->value;
 }
 

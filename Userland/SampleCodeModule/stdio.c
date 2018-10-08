@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <exitProcess.h>
 
 static unsigned int charR = 255;
 static unsigned int charG = 255;
@@ -45,6 +46,7 @@ void printPixelBackGroundColor(unsigned int x, unsigned int y)
 void clearWorkSpace()
 {
     systemCall(5, 0, 0, 0, 0, 0);
+		exitProcess();
 }
 
 void setBackGroundColor(unsigned int red, unsigned int green, unsigned int blue)

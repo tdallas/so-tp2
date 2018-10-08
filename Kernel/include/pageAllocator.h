@@ -18,7 +18,7 @@
 #define MEMORY_PAGES_END ((PAGE_QTY + 1) * PAGE_SIZE + DATA_ADDRESS)
 
 /*Amount of 64mb processes given*/
-#define MAX_PROCESSES 16
+#define MAX_PROCESSES 32
 
 void initializePageAllocator();
 uint64_t getAvailablePage();

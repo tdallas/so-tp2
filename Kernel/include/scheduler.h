@@ -6,7 +6,7 @@
 #include "genericQueue.h"
 #include "defs.h"
 
-#define MAX_PROCESSES 16
+#define MAX_PROCESSES 32
 #define QUANTUM 1
 
 typedef struct node

@@ -2,12 +2,13 @@
 #include <processExec.h>
 #include <stdio.h>
 #include <exitProcess.h>
+#include <prodcons.h>
 
 static char choice[BUFFER_SIZE];
 
 #define STEP 10
 
-#define CMD_SIZE 12
+#define CMD_SIZE 13
 
 static int isRunning = 1;
 static instruction commands[] = {
@@ -23,7 +24,8 @@ static instruction commands[] = {
 		{"exit\n", exitProcess},
 		{"exceptionOpCode\n", opCode},
 		{"messageTest\n", messageTest},
-		{"printPids\n", printPids}
+		{"printPids\n", printPids},
+		{"prodcons\n", prodcons}
 	};
 
 #define DEFAULT 0

@@ -29,6 +29,7 @@ static uint64_t _mutexInit(uint64_t mutex, uint64_t rdx, uint64_t rcx, uint64_t 
 static uint64_t _mutexUnlock(uint64_t mutex, uint64_t rdx, uint64_t rcx, uint64_t r8, uint64_t r9);
 static uint64_t _mutexLock(uint64_t mutex, uint64_t rdx, uint64_t rcx, uint64_t r8, uint64_t r9);
 static uint64_t _getPid(uint64_t mutex, uint64_t rdx, uint64_t rcx, uint64_t r8, uint64_t r9);
+static uint64_t _mutexClose(uint64_t mutex, uint64_t rdx, uint64_t rcx, uint64_t r8, uint64_t r9);
 
 
 static uint64_t (*systemCall[])(uint64_t rsi, uint64_t rdx, uint64_t rcx, uint64_t r8, uint64_t r9) = {_getTime,                         //0
@@ -51,7 +52,8 @@ static uint64_t (*systemCall[])(uint64_t rsi, uint64_t rdx, uint64_t rcx, uint64
 																										 _mutexUnlock, //17
 																										 _mutexLock, //18
 																										 _setProcessForeground, //19
-																										 _getPid //20
+																										 _getPid, //20
+																										 _mutexClose //21
 																									   };
 
 
@@ -161,6 +163,10 @@ static uint64_t _mutexLock(uint64_t mutex, uint64_t rdx, uint64_t rcx, uint64_t 
 
 static uint64_t _mutexUnlock(uint64_t mutex, uint64_t rdx, uint64_t rcx, uint64_t r8, uint64_t r9){
 	return mutexUnlock((void*)mutex);
+}
+
+static uint64_t _mutexClose(uint64_t mutex, uint64_t rdx, uint64_t rcx, uint64_t r8, uint64_t r9){
+	return mutexClose((void*)mutex);
 }
 
 static uint64_t _getPid(uint64_t rsi, uint64_t rdx, uint64_t rcx, uint64_t r8, uint64_t r9){
