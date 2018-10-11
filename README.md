@@ -35,7 +35,3 @@ From the directory repository:
 ```
 help
 ```
-
-## Collaborators
-* Dorado, Tomas
-* Dallas, Tomas
