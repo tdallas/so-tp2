@@ -46,10 +46,9 @@ uint64_t getStackPage()
 	}
 	else
 	{
-		//out of 64mb pages
+		//out of 2mb pages
 		printString("OUT OF MEMORY\n", 0, 155, 255);
-		while (1)
-			;
+		while (1);
 	}
 }
 
@@ -59,10 +58,6 @@ void releaseStackPage(uint64_t stackpage)
 	if (stackPageIndex < MAX_PROCESSES)
 	{
 		megasStack[stackPageIndex] = stackpage;
-	}
-	else
-	{
-		//restoreStackPages();
 	}
 }
 
@@ -81,8 +76,7 @@ uint64_t peekAvailableStackPage()
 	else
 	{
 		printString("OUT OF MEMORY\n", 0, 155, 255);
-		while (1)
-			;
+		while (1);
 	}
 }
 uint64_t getAvailablePage()
@@ -101,10 +95,9 @@ uint64_t getAvailablePage()
 	}
 	else
 	{
-		//out of 64k pages
+		//out of 4k pages
 		printString("OUT OF MEMORY\n", 0, 155, 255);
-		while (1)
-			;
+		while (1);
 	}
 }
 uint64_t peekAvailablePage()
@@ -122,8 +115,7 @@ uint64_t peekAvailablePage()
 	else
 	{
 		printString("OUT OF MEMORY\n", 0, 155, 255);
-		while (1)
-			;
+		while (1);
 	}
 }
 void releasePage(uint64_t page)
@@ -133,21 +125,13 @@ void releasePage(uint64_t page)
 	{
 		pageStack[indexInStack] = page;
 	}
-	else
-	{
-		restorePages();
-	}
 }
 
-void restorePages()
-{
-	// indexInStack = 0;
-	// availablePage = reserved + 1;
-}
 int getIndexInStack()
 {
 	return indexInStack;
 }
+
 uint64_t getAvailableIndex()
 {
 	return availablePage;

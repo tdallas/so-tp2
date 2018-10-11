@@ -69,11 +69,15 @@ static uint64_t _getTime(uint64_t rsi, uint64_t rdx, uint64_t rcx, uint64_t r8, 
 
 static uint64_t _readChar(uint64_t rsi, uint64_t rdx, uint64_t rcx, uint64_t r8, uint64_t r9)
 {
+	if(!isProcessRunningInForeground())
+		return 0;
 	return getChar();
 }
 
 static uint64_t _writeChar(uint64_t rsi, uint64_t rdx, uint64_t rcx, uint64_t r8, uint64_t r9)
 {
+	// if(!isProcessRunningInForeground())
+	// 	return 0;
 	printChar((unsigned char)rsi, (unsigned char)rdx, (unsigned char)rcx, (unsigned char)r8);
 	return 1;
 }
@@ -89,28 +93,38 @@ static uint64_t _memalloc(uint64_t rsi, uint64_t rdx, uint64_t rcx, uint64_t r8,
 }
 
 static uint64_t _clearBackGround(uint64_t rsi, uint64_t rdx, uint64_t rcx, uint64_t r8, uint64_t r9){
+	if(!isProcessRunningInForeground())
+		return 0;
 	printBackGround();
 	return 1;
 }
 
 static uint64_t _setBackGround(uint64_t rsi, uint64_t rdx, uint64_t rcx, uint64_t r8, uint64_t r9)
 {
+	if(!isProcessRunningInForeground())
+		return 0;
 	setBackGroundColor((unsigned char)rsi, (unsigned char)rdx, (unsigned char)rcx);
 	return 1;
 }
 
 static uint64_t _writePixel(uint64_t rsi, uint64_t rdx, uint64_t rcx, uint64_t r8, uint64_t r9)
 {
+	if(!isProcessRunningInForeground())
+		return 0;
 	return printPixel((unsigned int)rsi, (unsigned int)rdx, (unsigned char)rcx, (unsigned char)r8, (unsigned char)r9);
 }
 
 static uint64_t _setPixel(uint64_t rsi, uint64_t rdx, uint64_t rcx, uint64_t r8, uint64_t r9)
 {
+	if(!isProcessRunningInForeground())
+		return 0;
 	return setActualPixel((unsigned int)rsi, (unsigned int)rdx);
 }
 
 static uint64_t _paintPixelBackGround(uint64_t rsi, uint64_t rdx, uint64_t rcx, uint64_t r8, uint64_t r9)
 {
+	if(!isProcessRunningInForeground())
+		return 0;
 	return paintPixelBackGroundColor((unsigned int)rsi, (unsigned int)rdx);
 }
 

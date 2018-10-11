@@ -30,6 +30,8 @@ void help()
     printf("                                To clean the console, write clear\n");
     printf("             If you want to display time on console, write displayTimeConsole\n");
     printf("             messageTest :: sends a message to multiple processes\n");
+    printf("             prodcons if you like to see our resolution to prodcons problem\n");
+    printf("             printPids (with cammelCase) if you like to print pids of processes\n");
     printf("              Write exceptionZero for trying our divZero exception catch\n");
     printf("              Write exceptionOpCode for trying our opCode exception catch\n");
     printf("                           If you want to exit, write exit\n");

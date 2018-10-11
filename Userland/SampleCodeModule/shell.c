@@ -8,7 +8,7 @@ static char choice[BUFFER_SIZE];
 
 #define STEP 10
 
-#define CMD_SIZE 13
+#define CMD_SIZE 14
 
 static int isRunning = 1;
 static instruction commands[] = {
@@ -17,7 +17,7 @@ static instruction commands[] = {
 		{"changeBackGroundColor\n", changeBackGroundColor},
 		{"info\n", info},
 		{"clear\n", clearWorkSpace},
-		//{"displayTimeDigital\n", startDigitalTime},
+		{"displayTimeDigital\n", startDigitalTime},
 		{"displayTimeConsole\n", displayTime},
 		{"blobWars\n", iniciarBlobWars},
 		{"exceptionZero\n", zeroDiv},
@@ -35,7 +35,6 @@ static instruction commands[] = {
 #define GREEN 4
 #define BLUE 5
 
-
 void shell()
 {
 	printf("Shell initialized\n");
@@ -43,9 +42,6 @@ void shell()
 	char lastString[MAX_WORD_LENGTH] = {0};
 	int counter = 0;
 	char ch;
-
-	createMutex();
-	createSem();
 
 	printf("$> ");
 
@@ -237,14 +233,4 @@ int wichColor(char *color)
         return BLUE;
     }
     return -1;
-}
-
-
-void createMutex()
-{
-	// systemCallMutexInit("printMutex");
-}
-void createSem()
-{
-	// systemCallSemOpen("printSem");
 }

@@ -85,16 +85,20 @@ void setNullAllProcessPages(process *process)
 
 void removeProcess(process *p)
 {
+
   if (p != NULL)
   {
     processesNumber--;
     freeDataPages(p);
-    if (foreground == p)
+    if (foreground == p){
       setProcessForeground(processesTable[p->ppid]->pid);
+
+    }
     processesTable[p->pid] = NULL;
     free((void *)p->stackPage);
     free((void *)p);
     free((void *)p->messageQueue);
+
   }
 }
 
@@ -208,9 +212,10 @@ int isProcessBlocked(process *p)
 void setProcessForeground(int pid)
 {
   process *p = getProcessByPid(pid);
-  if (p != NULL && p->pid != 0)
+  if (p != NULL)
   {
     foreground = p;
+
   }
 }
 
